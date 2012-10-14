@@ -13,8 +13,8 @@
         android:gravity="right"
         android:text="@string/label_example"
         android:layout_marginRight="5dip"
-        android:textSize="10dip"
         android:textColor="#10bcc9"
+        android:textSize="10dip"
         android:textStyle="bold"/>
  
     <TextView
