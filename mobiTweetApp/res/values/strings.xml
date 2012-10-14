@@ -1,8 +1,13 @@
 <resources>
 
     <string name="app_name">mobiTweetApp</string>
-    <string name="hello">Tere</string>
     <string name="menu_log_out">Log out</string>
     <string name="title_activity_log_in">mobiTweetApp</string>
+    <string name="button_search">Search</string>
+    <string name="button_home">Home</string>
+    <string name="button_tweet">Tweet</string>
+    <string name="button_send">Send</string>
+    <string name="label_send_tweet">Send Tweet:</string>
+    <string name="label_example">example</string>
 
 </resources>
