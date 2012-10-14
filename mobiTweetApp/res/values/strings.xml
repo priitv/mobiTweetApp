@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="app_name">mobiTweetApp</string>
+    <string name="hello">Tere</string>
+    <string name="menu_log_out">Log out</string>
+    <string name="title_activity_log_in">mobiTweetApp</string>
+
+</resources>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#ABABAB">
+    
+    <RelativeLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="70dip"
+	    android:focusable="true"
+	    android:focusableInTouchMode="true">
+	    
+        <TextView
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="35dip"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="search"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:layout_marginRight="5dip"
+        android:textSize="15dip"
+        android:textColor="#444444"
+        android:textStyle="bold"/>
+	    
+        <EditText
+        android:id="@+id/edittext_search"
+        android:layout_width="fill_parent"
+        android:layout_height="35dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_toLeftOf="@+id/search"
+        android:ems="10"
+        android:inputType="text" />
+	    
+        <TextView
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/edittext_search"
+        android:gravity="center"
+        android:text="home"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:layout_marginLeft="5dip"
+        android:textSize="15dip"
+        android:textColor="#444444"
+        android:textStyle="bold"/>
+	    
+        <TextView
+        android:id="@+id/tweet"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignTop="@+id/home"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="tweet"
+        android:onClick="onClick"
+        android:clickable="true"
+        android:layout_marginRight="5dip"
+        android:textSize="15dip"
+        android:textColor="#444444"
+        android:textStyle="bold"/>
+        
+    </RelativeLayout>
+ 
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginBottom="5dip"
+        android:layout_height="wrap_content"
+        android:background="#CCCCCC"
+        android:cacheColorHint="#ABABAB"
+        android:divider="#ABABAB"
+        android:dividerHeight="1dp" />
+    
+</LinearLayout>
