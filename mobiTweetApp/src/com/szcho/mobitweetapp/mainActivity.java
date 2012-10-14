@@ -89,7 +89,7 @@ public class mainActivity extends Activity implements OnClickListener {
     @Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		Log.i("LogInActivity.onNewIntent", "kutse tagasi");
+		Log.i("LogInActivity.onNewIntent", "call");
 		Uri uri = intent.getData();
 		twitter.authenticate(uri.getQueryParameter("oauth_verifier"));
 		displayTimeLine();

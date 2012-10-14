@@ -31,6 +31,10 @@
             android:label="@string/title_activity_log_in"
             android:name=".TweetActivity" >
         </activity>
+        <activity
+            android:label="@string/title_activity_log_in"
+            android:name=".AuthenticateActivity" >
+        </activity>
     </application>
 
 </manifest>

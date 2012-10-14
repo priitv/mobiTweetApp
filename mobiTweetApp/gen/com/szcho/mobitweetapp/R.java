@@ -21,16 +21,18 @@ public final class R {
         public static final int edittext_send_tweet=0x7f070003;
         public static final int home=0x7f070007;
         public static final int list=0x7f070009;
-        public static final int log_out=0x7f07000a;
+        public static final int log_out=0x7f07000b;
         public static final int search=0x7f070005;
         public static final int text=0x7f070002;
         public static final int tweet=0x7f070008;
         public static final int user_name=0x7f070001;
+        public static final int webView=0x7f07000a;
     }
     public static final class layout {
         public static final int listrow=0x7f030000;
         public static final int send_tweet=0x7f030001;
         public static final int timeline=0x7f030002;
+        public static final int webview=0x7f030003;
     }
     public static final class menu {
         public static final int activity_main=0x7f060000;

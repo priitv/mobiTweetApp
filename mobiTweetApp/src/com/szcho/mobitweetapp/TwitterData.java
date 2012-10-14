@@ -3,7 +3,6 @@ package com.szcho.mobitweetapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.util.Log;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -40,7 +39,10 @@ public class TwitterData {
 	    		Log.i("TwitterData.LogIn", "Getting access");
 				requestToken = twitter.getOAuthRequestToken("mobitweetapp://callback");
 				String authUrl = requestToken.getAuthenticationURL();
-				activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
+				
+				Intent intent = new Intent(activity, AuthenticateActivity.class);
+			    intent.putExtra("URL", authUrl);
+			    activity.startActivity(intent);
 	    	}
 		} catch (TwitterException e) {
 			e.printStackTrace();
