@@ -9,14 +9,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
-        android:text="Send tweet:"
+        android:text="@string/label_send_tweet"
         android:textSize="20dip"
         android:textStyle="bold" />
-
+
     <EditText
         android:id="@+id/edittext_send_tweet"
         android:layout_width="200dip"
-        android:layout_height="200dip"
+        android:layout_height="0dip"
         android:layout_weight="0.04"
         android:ems="10"
         android:gravity="top"
@@ -30,6 +30,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="Send" />
+        android:text="@string/button_send" />
 
 </LinearLayout>

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:gravity="right"
-        android:text="17:17"
+        android:text="@string/label_example"
         android:layout_marginRight="5dip"
         android:textSize="10dip"
         android:textColor="#10bcc9"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/created_at"
-        android:text="user name"
+        android:text="@string/label_example"
         android:textColor="#040404"
         android:typeface="sans"
         android:textSize="15dip"
@@ -35,6 +35,6 @@
         android:layout_below="@+id/user_name"
         android:textColor="#343434"
         android:textSize="10dip"
-        android:text="text" />
+        android:text="@string/label_example" />
  
 </RelativeLayout>
