@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
  
+/**
+ * Adapter to custom ListView for timeline
+ * @author PriitV
+ *
+ */
 public class TimelineAdapter extends BaseAdapter {
  
     private Activity activity;

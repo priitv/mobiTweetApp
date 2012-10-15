@@ -9,6 +9,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * Activity to post tweets.. Nothing fancy
+ * @author PriitV
+ *
+ */
 public class TweetActivity extends Activity {
 	
 	private TwitterData twitter;

@@ -3,11 +3,6 @@ package com.szcho.mobitweetapp;
 import java.util.ArrayList;
 import java.util.List;
 
-import twitter4j.Query;
-import twitter4j.QueryResult;
-import twitter4j.Status;
-import twitter4j.Tweet;
-import twitter4j.TwitterException;
 import android.view.View;
 import android.net.Uri;
 import android.os.Bundle;
@@ -55,16 +50,18 @@ public class mainActivity extends Activity implements OnClickListener {
     public void onClick(View view) {
     	switch (view.getId()) {
         case R.id.tweet:
+        	searchInput.setText("");
         	Intent intent = new Intent(context, TweetActivity.class);
             startActivity(intent);
         break;
         case R.id.home:
         	searchInput.setText("");
-    		getHomeTimeline();
+    		statuses = twitter.getHomeTimeline();
     		refreshTimeline();
         break;
         case R.id.search:
-        	searchTweets(searchInput.getText().toString());
+        	statuses = twitter.searchTweets(searchInput.getText().toString());
+    		refreshTimeline();
         break;
         }
     }
@@ -86,6 +83,8 @@ public class mainActivity extends Activity implements OnClickListener {
         }
     }
     
+    //Left next method just in case for future uses, but not using it anymore.
+    //From now on getting verifier from AuthenticateActivity result.
     @Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -94,13 +93,24 @@ public class mainActivity extends Activity implements OnClickListener {
 		twitter.authenticate(uri.getQueryParameter("oauth_verifier"));
 		displayTimeLine();
 	}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1) {
+			if(resultCode == RESULT_OK){
+				String result=data.getStringExtra("result");
+				twitter.authenticate(result);
+				displayTimeLine();
+			}
+		}
+    }
     
     @Override
 	protected void onResume() {
     	super.onResume();
     	Log.i("mainActivity", "resume");
     	if (twitter.isConnected()) {
-    		getHomeTimeline();
+    		statuses = twitter.getHomeTimeline();
     		if (adapter != null) {
     			refreshTimeline();
     		} else {
@@ -109,51 +119,24 @@ public class mainActivity extends Activity implements OnClickListener {
     	}
 	}
     
-    private void getHomeTimeline() {
-    	try {
-			statuses.clear();
-			List<Status> statuses = twitter.getTwitter().getHomeTimeline();
-			for (Status status : statuses) {
-				this.statuses.add(new TweetData(status.getUser().getName(),
-						status.getText(), 
-						status.getCreatedAt().toLocaleString(), 
-						null));
-			}
-		} catch (TwitterException e) {
-			e.printStackTrace();
-		}
-    }
-    
+    /**
+     * Set Timeline and data in it
+     */
     private void displayTimeLine() {
     	list=(ListView)findViewById(R.id.list);
     	
     	adapter=new TimelineAdapter(this, statuses);
         list.setAdapter(adapter);
 	}
-    
+
+    /**
+     * Change data in Timeline
+     */
     private void refreshTimeline() {
     	if (adapter != null) {
 			adapter.setStatuses(statuses);
 			adapter.notifyDataSetChanged();
     	}
-    }
-    
-    private void searchTweets(String search) {
-        try {
-    		Query query = new Query(search);
-			QueryResult result = twitter.getTwitter().search(query);
-			List<Tweet> tweets = result.getTweets();
-			statuses.clear();
-			for (Tweet tweet : tweets) {
-				statuses.add(new TweetData(tweet.getFromUserName(),
-						tweet.getText(), 
-						tweet.getCreatedAt().toLocaleString(), 
-						null));
-			}
-		} catch (TwitterException e) {
-			e.printStackTrace();
-		}
-        refreshTimeline();
     }
     
 }

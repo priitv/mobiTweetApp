@@ -1,9 +1,18 @@
 package com.szcho.mobitweetapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
+import twitter4j.Tweet;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -42,11 +51,11 @@ public class TwitterData {
 				
 				Intent intent = new Intent(activity, AuthenticateActivity.class);
 			    intent.putExtra("URL", authUrl);
-			    activity.startActivity(intent);
+			    activity.startActivityForResult(intent, 1);
 	    	}
 		} catch (TwitterException e) {
 			e.printStackTrace();
-			Log.e("LogInActivity.twitterLogIn", e.getMessage());
+			Log.e("TwitterData.LogIn", e.getMessage());
 		}
     }
     
@@ -60,13 +69,41 @@ public class TwitterData {
 				twitter.setOAuthAccessToken(accessTokenTwi);
 	    		connected = true;
 			} else {
-				Log.d("authenticate", "Not verified");
+				Log.d("TwitterData.authenticate", "Not verified");
 			}
 
 		} catch (TwitterException ex) {
-			Log.e("authenticate", "" + ex.getMessage());
+			Log.e("TwitterData.authenticate", "" + ex.getMessage());
 		}
     	savePreferences();
+    }
+
+    public List<TweetData> getHomeTimeline() {
+        List<TweetData> tweets = new ArrayList<TweetData>();
+    	try {
+			List<Status> statuses = twitter.getHomeTimeline();
+			for (Status status : statuses) {
+				tweets.add(new TweetData(status));
+			}
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+    	return tweets;
+    }
+    
+    public List<TweetData> searchTweets(String search) {
+    	List<TweetData> statuses = new ArrayList<TweetData>();
+        try {
+    		Query query = new Query(search);
+			QueryResult result = twitter.search(query);
+			List<Tweet> tweets = result.getTweets();
+			for (Tweet tweet : tweets) {
+				statuses.add(new TweetData(tweet));
+			}
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+        return statuses;
     }
     
     public void setAccessToken(String accessToken) {
@@ -101,7 +138,6 @@ public class TwitterData {
 		SharedPreferences sharedPreferences = activity.getSharedPreferences("mobiTweetApp", 0);
 		String newAccessToken = sharedPreferences.getString("accessToken", "");
 		String newAccessTokenSecret = sharedPreferences.getString("accessTokenSecret", "");
-		Log.i("loadPreferences", "" + newAccessToken);
 		setAccessToken(newAccessToken);
 		setAccessTokenSecret(newAccessTokenSecret);
 	}
@@ -110,6 +146,9 @@ public class TwitterData {
 		accessToken = "";
 		accessTokenSecret = "";
 		savePreferences();
+		CookieSyncManager.createInstance(activity);
+		CookieManager cookieManager = CookieManager.getInstance();
+		cookieManager.removeSessionCookie();
 		activity.finish();
 	}
 
