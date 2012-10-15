@@ -101,6 +101,8 @@ public class mainActivity extends Activity implements OnClickListener {
 				String result=data.getStringExtra("result");
 				twitter.authenticate(result);
 				displayTimeLine();
+			} else if(resultCode == RESULT_CANCELED){
+				finish();
 			}
 		}
     }
