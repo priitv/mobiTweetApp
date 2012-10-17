@@ -1,6 +1,6 @@
 package com.szcho.mobitweetapp;
 
-import twitter4j.TwitterException;
+import com.szcho.mobitweetapp.networkRequestTasks.SendTweetTask;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,18 +25,15 @@ public class TweetActivity extends Activity {
 		super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.send_tweet);
+        final Activity activity = this;
     	twitter = new TwitterData(this);
     	send = (Button) findViewById(R.id.button_send_tweet);
     	text = (EditText) findViewById(R.id.edittext_send_tweet);
     	
     	send.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
-			    try {
-					twitter.getTwitter().updateStatus(text.getText().toString());
-					finish();
-				} catch (TwitterException e) {
-					e.printStackTrace();
-				}
+			    new SendTweetTask(activity, twitter.getTwitter())
+			    	.execute(text.getText().toString());
 			}
 		});
 	}

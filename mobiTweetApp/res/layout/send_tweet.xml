@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical" >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dip"
-        android:text="@string/label_send_tweet"
-        android:textSize="20dip"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/edittext_send_tweet"
-        android:layout_width="200dip"
-        android:layout_height="0dip"
-        android:layout_weight="0.04"
-        android:ems="10"
-        android:gravity="top"
-        android:inputType="textMultiLine" >
-
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/button_send_tweet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="@string/button_send" />
-
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="10dip"
+    android:background="#ABABAB" >
+	    <TextView
+	        android:id="@+id/label_send_tweet"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_margin="10dip"
+	        android:text="@string/label_send_tweet"
+	        android:textSize="20dip"
+	        android:textStyle="bold" />
+		
+	    <EditText
+	        android:id="@+id/edittext_send_tweet"
+	        android:layout_width="fill_parent"
+	        android:layout_height="100dip"
+	        android:ems="10"
+	        android:gravity="top"
+	        android:inputType="textMultiLine" >
+	
+	        <requestFocus />
+	    </EditText>
+	
+	    <Button
+	        android:id="@+id/button_send_tweet"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="right"
+	        android:text="@string/button_send" />
 </LinearLayout>

@@ -1,10 +1,11 @@
 package com.szcho.mobitweetapp;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.szcho.mobitweetapp.networkRequestTasks.RetrieveHomeTimelineTask;
+import com.szcho.mobitweetapp.networkRequestTasks.RetrieveSearchTimelineTask;
+
 import android.view.View;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -17,18 +18,20 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class mainActivity extends Activity implements OnClickListener {
 
+	public static final int ON_ACTIVITY_RESULT_AUTH = 1;
+	public static final int ON_ACTIVITY_RESULT_TWEET = 2;
     private Context context;
 	private TwitterData twitter;
-	
+
 	private TextView tweetButton, homeButton, searchButton;
 	private EditText searchInput;
 	
 	private ListView list;
 	private TimelineAdapter adapter;
-	private List<TweetData> statuses = new ArrayList<TweetData>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,8 @@ public class mainActivity extends Activity implements OnClickListener {
         context = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.timeline);
-        Log.i("info", "########## asi hakkab ###########");
+        Log.i("mainActivity.onCreate"
+        		, "########## starting main activity ###########");
     	twitter = new TwitterData(this);
         tweetButton = (TextView) findViewById(R.id.tweet);
         homeButton = (TextView) findViewById(R.id.home);
@@ -45,6 +49,8 @@ public class mainActivity extends Activity implements OnClickListener {
         tweetButton.setOnClickListener(this);
         homeButton.setOnClickListener(this);
         searchButton.setOnClickListener(this);
+        if (twitter.isConnected()) 
+        	new RetrieveHomeTimelineTask(this).execute();
     } 
     
     public void onClick(View view) {
@@ -52,16 +58,20 @@ public class mainActivity extends Activity implements OnClickListener {
         case R.id.tweet:
         	searchInput.setText("");
         	Intent intent = new Intent(context, TweetActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, ON_ACTIVITY_RESULT_TWEET);
         break;
         case R.id.home:
         	searchInput.setText("");
-    		statuses = twitter.getHomeTimeline();
-    		refreshTimeline();
+			new RetrieveHomeTimelineTask(this).execute();
         break;
         case R.id.search:
-        	statuses = twitter.searchTweets(searchInput.getText().toString());
-    		refreshTimeline();
+        	String searchText = searchInput.getText().toString();
+        	if (!searchText.matches("")) {
+				new RetrieveSearchTimelineTask(this)
+					.execute(searchText);
+        	} else {
+        		Toast.makeText(this, "Search field was empty!", Toast.LENGTH_SHORT).show();
+        	}
         break;
         }
     }
@@ -82,49 +92,43 @@ public class mainActivity extends Activity implements OnClickListener {
             return super.onOptionsItemSelected(item);
         }
     }
-    
-    //Left next method just in case for future uses, but not using it anymore.
-    //From now on getting verifier from AuthenticateActivity result.
-    @Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		Log.i("LogInActivity.onNewIntent", "call");
-		Uri uri = intent.getData();
-		twitter.authenticate(uri.getQueryParameter("oauth_verifier"));
-		displayTimeLine();
-	}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == 1) {
+    	switch (requestCode) {
+    	case ON_ACTIVITY_RESULT_AUTH:
+    		//after logging in and getting verifier
 			if(resultCode == RESULT_OK){
 				String result=data.getStringExtra("result");
 				twitter.authenticate(result);
-				displayTimeLine();
 			} else if(resultCode == RESULT_CANCELED){
 				finish();
 			}
+    		break;
+    	case ON_ACTIVITY_RESULT_TWEET:
+    		//request fresh home timeline after tweeting
+			if(resultCode == RESULT_OK){
+				Log.i("mainActivity.onActivityResult", "tweeted");
+				try {
+					Thread.sleep(500);
+					//ugly but otherwise it may get old data from server,
+					//can't understand why. Maybe server-side problem(couldn't 
+					//display new data fast enough).
+				} catch (InterruptedException e) {
+					Log.i("mainActivity.onActivityResult", "sleep interrupted");
+				}
+				new RetrieveHomeTimelineTask(this).execute();
+			} else {
+				Log.i("mainActivity.onActivityResult", "Tweet wasn't sent.");
+			}
+			break;
 		}
     }
-    
-    @Override
-	protected void onResume() {
-    	super.onResume();
-    	Log.i("mainActivity", "resume");
-    	if (twitter.isConnected()) {
-    		statuses = twitter.getHomeTimeline();
-    		if (adapter != null) {
-    			refreshTimeline();
-    		} else {
-    			displayTimeLine();
-    		}
-    	}
-	}
     
     /**
      * Set Timeline and data in it
      */
-    private void displayTimeLine() {
+    private void displayTimeLine(List<TweetData> statuses) {
     	list=(ListView)findViewById(R.id.list);
     	
     	adapter=new TimelineAdapter(this, statuses);
@@ -133,12 +137,19 @@ public class mainActivity extends Activity implements OnClickListener {
 
     /**
      * Change data in Timeline
+     * @param statuses 
      */
-    private void refreshTimeline() {
+    public void refreshTimeline(List<TweetData> statuses) {
     	if (adapter != null) {
 			adapter.setStatuses(statuses);
 			adapter.notifyDataSetChanged();
+    	} else {
+    		displayTimeLine(statuses);
     	}
     }
+	
+	public TwitterData getTwitterData() {
+		return twitter;
+	}
     
 }
