@@ -29,14 +29,14 @@ public class AuthenticateTask extends AsyncTask<String, Void, AccessToken> {
 	}
 
     protected void onPostExecute(AccessToken accessTokenTwi) {
-		twitterData.setAccessToken(accessTokenTwi.getToken());
-		twitterData.setAccessTokenSecret(accessTokenTwi.getTokenSecret());
+		if (accessTokenTwi != null) {
+			twitterData.setAccessToken(accessTokenTwi.getToken());
+			twitterData.setAccessTokenSecret(accessTokenTwi.getTokenSecret());
 		
-		if (twitterData.getAccessToken() != null) {
 			twitterData.getTwitter().setOAuthAccessToken(accessTokenTwi);
     		twitterData.setConnected(true);
     		twitterData.savePreferences();
-    		new RetrieveHomeTimelineTask((mainActivity) twitterData.getActivity()).execute();
+    		new RetrieveHomeTimelineTask((mainActivity) twitterData.getActivity()).execute(1);
 		} else {
 			Log.d("AuthenticateTask.onPostExecute", "Not verified");
 		}

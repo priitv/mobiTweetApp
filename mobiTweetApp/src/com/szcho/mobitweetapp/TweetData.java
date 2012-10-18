@@ -5,6 +5,7 @@ import twitter4j.Tweet;
 
 public class TweetData {
 	private String userName, text, createdAt, profileImageURL;
+	private long tweetId;
 	
 	/**
 	 * Contains needed data for TimelineAdapter
@@ -13,11 +14,12 @@ public class TweetData {
 	 * @param createdAt
 	 * @param profileImageURL
 	 */
-	public TweetData(String userName, String text, String createdAt, String profileImageURL) {
+	public TweetData(String userName, String text, String createdAt, String profileImageURL, int tweetId) {
 		this.userName = userName;
 		this.text = text;
 		this.createdAt = createdAt;
 		this.profileImageURL = profileImageURL;
+		this.tweetId = tweetId;
 	}
 	
 	public TweetData(Status status) {
@@ -25,6 +27,7 @@ public class TweetData {
 		this.text = status.getText();
 		this.createdAt = status.getCreatedAt().toLocaleString();
 		this.profileImageURL = status.getUser().getProfileImageURL().toString();
+		this.tweetId = status.getId();
 	}
 	
 	public TweetData(Tweet tweet) {
@@ -32,6 +35,7 @@ public class TweetData {
 		this.text = tweet.getText();
 		this.createdAt = tweet.getCreatedAt().toLocaleString();
 		this.profileImageURL = tweet.getProfileImageUrl();
+		this.tweetId = tweet.getId();
 	}
 
 	public String getUserName() {
@@ -64,6 +68,14 @@ public class TweetData {
 
 	public void setProfileImageURL(String profileImageURL) {
 		this.profileImageURL = profileImageURL;
+	}
+
+	public long getTweetId() {
+		return tweetId;
+	}
+
+	public void setTweetId(int tweetId) {
+		this.tweetId = tweetId;
 	}
 	
 }
