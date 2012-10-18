@@ -7,7 +7,7 @@
     <string name="button_home">Home</string>
     <string name="button_tweet">Tweet</string>
     <string name="button_send">Send</string>
-    <string name="label_send_tweet">Send Tweet:</string>
+    <string name="label_send_tweet">Send Tweet(140):</string>
     <string name="label_example">example</string>
 
 </resources>
